@@ -9,7 +9,7 @@ export default function Home() {
   const [trivia, setTrivia] = useState(0)
   const [gameState, setGameState] = useState('ready')
   const [score, setScore] = useState(0)
-  const [time, setTime] = useState(15)
+  const [time, setTime] = useState(150)
   const [confetti, setConfetti] = useState(false)
   const question = triviaAnswer
 
@@ -37,7 +37,7 @@ export default function Home() {
     setTrivia(0)
     setOrderQuestions(questionList)
     setGameState('runing')
-    setTime(15)
+    setTime(150)
   }
 
   const checkResult = (result, correctAnswer) => {
@@ -47,7 +47,6 @@ export default function Home() {
     } else {
       gameOver('gameover')
     }
-    console.log('TRIVIA:::', trivia)
   }
 
   const nextQuestion = () => {
@@ -57,8 +56,8 @@ export default function Home() {
       setGameState('fin')
     } else {
       setGameState('runing')
-      setTime(15)
     }
+    if (time <= 0) gameOver('timeover')
   }
 
   const gameOver = (game) => {
@@ -85,18 +84,26 @@ export default function Home() {
           <p className="text-xl mb-4">"{question[orderQuestions[trivia]][0]}"</p>
           <p className="text-xl mb-2"><b>Respuesta correcta:</b></p>
           <p className="text-xl mb-16">{question[orderQuestions[trivia]][((question[orderQuestions[trivia]][5]).charCodeAt(0)) - 64]}</p>
+          <button type="button" onClick={nextQuestion} className="dark:bg-stone-500 bg-stone-300 rounded-2xl px-4 py-2 shadow-neutral-900 shadow-xl">PRÓXIMA PREGUNTA</button>
+        </div>
+      )}
+
+      {gameState === 'gameover' && (
+        <div className="dark:bg-red-700 bg-red-300 text-center mt-8 lg:w-2/3 w-full px-4 py-8 rounded-3xl mx-auto border-solid border-2 dark:border-neutral-100 border-neutral-900">
+          <p className="text-4xl mb-8"><b>{gameState === 'timeover' ? 'Se acabó el tiempo' : 'Fallaste'}</b></p>
+          <p className="text-xl mb-8">"{question[orderQuestions[trivia]][0]}"</p>
+          <p className="text-xl mb-2"><b>La respuesta correcta era:</b></p>
+          <p className="text-lg mb-16">{question[orderQuestions[trivia]][((question[orderQuestions[trivia]][5]).charCodeAt(0)) - 64]}</p>
           <button type="button" onClick={nextQuestion} className="bg-stone-500 rounded-2xl px-4 py-2 shadow-neutral-900 shadow-xl">PRÓXIMA PREGUNTA</button>
         </div>
       )}
 
-      {(gameState === 'gameover' || gameState === 'timeover') && (
+      {gameState === 'timeover' && (
         <div className="dark:bg-red-700 bg-red-300 text-center mt-8 lg:w-2/3 w-full px-4 py-8 rounded-3xl mx-auto border-solid border-2 dark:border-neutral-100 border-neutral-900">
-          <p className="text-4xl mb-4"><b>{gameState === 'timeover' ? 'Se acabó el tiempo' : 'Fallaste'}</b></p>
-          <p className="text-xl mb-4">"{question[orderQuestions[trivia]][0]}"</p>
-          <p className="text-xl mb-2"><b>La respuesta correcta era:</b></p>
-          <p className="text-ms mb-12">{question[orderQuestions[trivia]][((question[orderQuestions[trivia]][5]).charCodeAt(0)) - 64]}</p>
-          <p className="text-xl mb-8">Tu Puntaje fue : {score}</p>
-          <button type="button" onClick={randomQuestions} className="bg-stone-500 rounded-2xl px-4 py-2 shadow-neutral-900 shadow-xl">JUGAR OTRA VEZ</button>
+          <p className="text-4xl mb-16"><b>'Se acabó el tiempo'</b></p>
+          <p className="text-4xl mb-8">Tu Puntaje fue :</p>
+          <p className="text-4xl mb-16">{score}</p>
+          <button type="button" onClick={randomQuestions} className="dark:bg-stone-500 bg-stone-300 rounded-2xl px-4 py-2 shadow-neutral-900 shadow-xl">JUGAR OTRA VEZ</button>
         </div>
       )}
 
@@ -115,7 +122,7 @@ export default function Home() {
             Score {score}
           </div>
           <div className="flex flex-row lg:text-5xl text-2xl lg:mb-8 mb-0 justify-center items-center">
-            <img src="/time.png" alt="time" className="lg:scale-100 scale-50"/> {time}
+            <img src="/time.png" alt="time" className="lg:scale-100 scale-50" /> {time}
           </div>
           <div className="mb-8 dark:bg-yellow-600 bg-yellow-200 dark:text-white text-slate-800 py-4 px-6 border-solid border-2 border-white rounded-2xl">
             <h1>{question[orderQuestions[trivia]][0]}</h1>
